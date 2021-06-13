@@ -1,12 +1,12 @@
 import React, { useReducer, useEffect } from "react";
 
-import { Container } from "reactstrap";
+import { Container, Col, Row } from "reactstrap";
 
 // react-router-dom3
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 
 // react toastify stuffs
-import { ToastContainer } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 // bootstrap css
@@ -14,11 +14,12 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 
 // firebase stuffs
-//TODO: Done import firebase config and firebase database
+//TODO: DONE import firebase config and firebase database
 import { firebaseConfig } from "./utils/config";
 import firebase from "firebase/app";
 import "firebase/database";
 import "firebase/storage";
+
 // components
 import AddContact from "./pages/AddContact";
 import Contacts from "./pages/Contacts";
@@ -28,13 +29,13 @@ import ViewContact from "./pages/ViewContact";
 import PageNotFound from "./pages/PageNotFound";
 
 // context api stuffs
-//TODO: Done import reducers and contexts
+//TODO: DONE  import reducers and contexts
 import reducer from "./context/reducer";
 import { ContactContext } from "./context/Context";
 import { SET_CONTACT, SET_LOADING } from "./context/action.types";
 
 //initlizeing firebase app with the firebase config which are in ./utils/firebaseConfig
-//TODO: Done initialize FIREBASE
+//TODO:DONE  initialize FIREBASE
 firebase.initializeApp(firebaseConfig);
 
 // first state to provide in react reducer
@@ -57,8 +58,8 @@ const App = () => {
       payload: true,
     });
 
-    const contactRef = await firebase.database().ref("/contacts");
-    contactRef.on("value", (snapshot) => {
+    const contactsRef = await firebase.database().ref("/contacts");
+    contactsRef.on("value", (snapshot) => {
       dispatch({
         type: SET_CONTACT,
         payload: snapshot.val(),

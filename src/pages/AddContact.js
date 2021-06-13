@@ -1,3 +1,4 @@
+/* eslint-disable default-case */
 // https://firebase.google.com/docs/storage/web/upload-files#full_example
 // https://www.npmjs.com/package/browser-image-resizer#asyncawait
 
@@ -20,8 +21,9 @@ import {
 import { readAndCompressImage } from "browser-image-resizer";
 
 // configs for image resizing
-//TODO: Done add image configurations
+//TODO: DONE add image configurations
 import { imageConfig } from "../utils/config";
+
 // import { MdAddCircleOutline } from "react-icons/md";
 
 import { v4 } from "uuid";
@@ -73,16 +75,20 @@ const AddContact = () => {
   // To upload image to firebase and then set the the image link in the state of the app
   const imagePicker = async (e) => {
     // TODO: upload image and set D-URL to state
+
     try {
       const file = e.target.files[0];
-      var meta = {
-        contentType: file.type,
+
+      var metadata = {
+        contentType: file?.type,
       };
+
       let resizedImage = await readAndCompressImage(file, imageConfig);
+
       const storageRef = await firebase.storage().ref();
       var uploadTask = storageRef
-        .child("images/" + file.name)
-        .put(resizedImage, meta);
+        .child("images/" + file?.name)
+        .put(resizedImage, metadata);
 
       uploadTask.on(
         firebase.storage.TaskEvent.STATE_CHANGED,
@@ -90,24 +96,23 @@ const AddContact = () => {
           setIsUploading(true);
           var progress =
             (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+
           switch (snapshot.state) {
             case firebase.storage.TaskState.PAUSED:
               setIsUploading(false);
-              console.log("Uploading is Paused");
+              console.log("UPloading is paused");
               break;
             case firebase.storage.TaskState.RUNNING:
-              console.log("Uploading is in progress");
-              break;
-            default:
+              console.log("UPloading is in progress...");
               break;
           }
           if (progress === 100) {
             setIsUploading(false);
-            toast("Uploaded", { type: "info" });
+            toast("uploaded", { type: "success" });
           }
         },
         (error) => {
-          toast("Something went wrong", { type: "error" });
+          toast("something is wrong in state change", { type: "error" });
         },
         () => {
           uploadTask.snapshot.ref
@@ -119,15 +124,14 @@ const AddContact = () => {
         }
       );
     } catch (error) {
-      console.log(error);
+      console.error(error);
       toast("Something went wrong", { type: "error" });
     }
   };
 
   // setting contact to firebase DB
   const addContact = async () => {
-    //Done add contact method
-
+    //TODO: add contact method
     try {
       firebase
         .database()
@@ -162,6 +166,7 @@ const AddContact = () => {
         });
     } catch (error) {
       console.log(error);
+      toast("Oppss..", { type: "error" });
     }
   };
 
@@ -170,7 +175,7 @@ const AddContact = () => {
     e.preventDefault();
     isUpdate ? updateContact() : addContact();
 
-    toast("success", { type: "success" });
+    toast("Success", { type: "success" });
     // isUpdate wll be true when the user came to update the contact
     // when their is contact then updating and when no contact to update then adding contact
     //TODO: set isUpdate value
@@ -183,7 +188,7 @@ const AddContact = () => {
     });
 
     // after adding/updating contact then sending to the contacts
-    // TODO:- also sending when their is any errors
+    // TODO :- also sending when their is any errors
     history.push("/");
   };
 

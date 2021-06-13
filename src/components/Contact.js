@@ -28,35 +28,35 @@ const Contact = ({ contact, contactKey }) => {
 
   // to delete the contact when delete contact is clicked
   const deleteContact = () => {
-    //TODO: Done create this method from firebase
+    //TODO: DONE create this method from firebase
     firebase
       .database()
       .ref(`/contacts/${contactKey}`)
       .remove()
       .then(() => {
-        toast("deleted", { type: "warning" });
+        toast("Deleted Successfully", { type: "warning" });
       })
       .catch((err) => console.log(err));
   };
 
   // update the star/important contact ,ie, star it or unstar the single contact
   const updateImpContact = () => {
-    //TODO: Done update (star) contact, use contactKey
+    //TODO: DONE update (star) contact, use contactKey
     firebase
       .database()
       .ref(`/contacts/${contactKey}`)
       .update(
         {
-          star: !contact.star,
+          star: !contact?.star,
         },
         (err) => {
           console.log(err);
         }
       )
-      .then(()=>{
-        toast("Contact Updated", {type: "info"})
+      .then(() => {
+        toast("Contact Updated", { type: "info" });
       })
-      .catch(err=>console.log(err))
+      .catch((err) => console.log(err));
   };
 
   // when the update icon/ pen ion is clicked
@@ -66,8 +66,8 @@ const Contact = ({ contact, contactKey }) => {
     dispatch({
       type: CONTACT_TO_UPDATE,
       payload: contact,
-      key: contactKey
-    })
+      key: contactKey,
+    });
 
     // and pushing to the add contact screen
     history.push("/contact/add");
@@ -79,8 +79,8 @@ const Contact = ({ contact, contactKey }) => {
     //TODO: use dispatch to view single contact
     dispatch({
       type: SET_SINGLE_CONTACT,
-      payload:contact
-    })
+      payload: contact,
+    });
 
     // sending...
     history.push("/contact/view");
@@ -94,7 +94,7 @@ const Contact = ({ contact, contactKey }) => {
           className="d-flex justify-content-center align-items-center"
         >
           <div className="icon" onClick={() => updateImpContact()}>
-            {contact.star ? (
+            {contact?.star ? (
               <FaStar className=" text-primary" />
             ) : (
               <FaRegStar className=" text-info" />
@@ -105,17 +105,15 @@ const Contact = ({ contact, contactKey }) => {
           md="2"
           className="d-flex justify-content-center align-items-center"
         >
-          <img src={contact.picture} alt="" className="img-circle profile" />
+          <img src={contact?.picture} alt="" className="img-circle profile" />
         </Col>
         <Col md="8" onClick={() => viewSingleContact(contact)}>
-          <div className="text-primary">{contact.name}</div>
+          <div className="text-primary">{contact?.name}</div>
 
-          <div className="text-secondary">{contact.phoneNumber}</div>
-          <div className="text-secondary">
-            {contact.email}
-          </div>
+          <div className="text-secondary">{contact?.phoneNumber}</div>
+          <div className="text-secondary">{contact?.email}</div>
 
-          <div className="text-info">{contact.address}</div>
+          <div className="text-info">{contact?.address}</div>
         </Col>
         <Col
           md="1"
